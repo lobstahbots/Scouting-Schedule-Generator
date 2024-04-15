@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowJs": true,
+        "lib": [ "ES2023" ],
+        "sourceMap": true,
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"],
+}
