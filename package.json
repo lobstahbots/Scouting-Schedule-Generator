@@ -2,7 +2,7 @@
   "name": "scouting-schedule-generator",
   "version": "0.1.0",
   "description": "An FRC scouting schedule generator",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/lobstahbots/Scouting-Schedule-Generator.git",
   "author": "FRC 246 Lobstah Bots <lobstahbots@gmail.com>",
   "license": "MIT",
