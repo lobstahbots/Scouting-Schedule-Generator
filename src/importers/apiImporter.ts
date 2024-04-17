@@ -1,4 +1,4 @@
-import { Schedule } from "../types";
+import { Match, Schedule } from "../types";
 import axios from "axios";
 
 export default async function apiImporter( {year, eventCode, matchLevel}: {year: number, eventCode: string, matchLevel?: string}): Promise<Schedule> {
@@ -17,5 +17,5 @@ export default async function apiImporter( {year, eventCode, matchLevel}: {year:
     if (response.status !== 200) {
         throw new Error(`API request failed with status ${response.status} ${response.statusText}`);
     }
-    return response.data.Schedule;
+    return response.data.Schedule.map((match: Match) => ({...match, startTime: new Date(match.startTime)}));
 }
