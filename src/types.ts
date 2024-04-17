@@ -1,10 +1,10 @@
-interface TeamInMatch {
+export interface TeamInMatch {
     teamNumber: number;
     station: string;
     surrogate: boolean;
 }
 
-interface Match {
+export interface Match {
     field: string;
     tournamentLevel: string;
     description: string;
@@ -13,26 +13,26 @@ interface Match {
     teams: TeamInMatch[];
 }
 
-interface ScoutingTeam extends TeamInMatch {
+export interface ScoutingTeam extends TeamInMatch {
     scouter?: string;
 }
 
-interface ScoutingMatch extends Match {
+export interface ScoutingMatch extends Match {
     teams: ScoutingTeam[];
 }
 
-type Schedule = Match[];
+export type Schedule = Match[];
 
-type ScoutingSchedule = ScoutingMatch[];
+export type ScoutingSchedule = ScoutingMatch[];
 
-type Options = { [key: string]: string | number | string[] | number[] };
+export type Options = { [key: string]: string | number | string[] | number[] };
 
-type Importer = (eventName: string, options: Options) => Promise<Schedule>;
+export type Importer = (options: Options) => Promise<Schedule>;
 
-type Scheduler = (
+export type Scheduler = (
     schedule: Schedule,
     scouters: string[],
     options: Options,
 ) => ScoutingSchedule;
 
-type Exporter = (schedule: ScoutingSchedule, options: Options) => string;
+export type Exporter = (schedule: ScoutingSchedule, options: Options) => string;

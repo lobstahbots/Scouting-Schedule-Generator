@@ -1,3 +1,5 @@
+import { Schedule, ScoutingSchedule } from '../types';
+
 export default function simple(
     schedule: Schedule,
     scouters: string[],

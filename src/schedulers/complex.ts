@@ -1,3 +1,5 @@
+import { Match, Schedule, ScoutingSchedule } from '../types';
+
 /**
  * Generate a map for teams to scout for each map.
  * @param {Schedule} schedule The schedule to scout.
