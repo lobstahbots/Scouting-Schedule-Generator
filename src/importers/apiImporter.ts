@@ -2,7 +2,7 @@ import { Match, Schedule } from "../types";
 import axios from "axios";
 
 export default async function apiImporter( {year, eventCode, matchLevel}: {year: number, eventCode: string, matchLevel?: string}): Promise<Schedule> {
-    const url = `https://frc-api.firstinspires.org/v3.0/${year}/schedule/${eventCode}` + matchLevel !== undefined ? "?tournamentLevel=" + matchLevel : "";
+    const url = `https://frc-api.firstinspires.org/v3.0/${year}/schedule/${eventCode}` + (matchLevel !== undefined ? "?tournamentLevel=" + matchLevel : "");
     const API_KEY = process.env.FIRST_API_KEY;
     const USERNAME = process.env.FIRST_USERNAME;
     if (API_KEY === undefined || USERNAME === undefined) {

@@ -4,6 +4,10 @@ module.exports = {
     entry: "./src/index.ts",
     devtool: "inline-source-map",
     mode: "production",
+    entry: {
+        index: "./src/index.ts",
+        cli: "./src/cli.ts",
+    },
     module: {
         rules: [
             {
@@ -17,10 +21,11 @@ module.exports = {
         extensions: [".ts", ".js"],
     },
     output: {
-        filename: "index.js",
+        filename: "[name].js",
         path: path.resolve(__dirname, "dist"),
         libraryTarget: "umd",
         library: "scouting-schedule-generator",
         globalObject: "this",
     },
+    target: "node",
 };

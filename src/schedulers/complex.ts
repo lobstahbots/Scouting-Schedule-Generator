@@ -24,7 +24,7 @@ export function teamsToScout(
     const matchMap: Map<number, Match> = new Map();
     const scoutedCounts: Map<number, number> = new Map();
     const teamSet: Set<number> = new Set();
-    const addToResult = (teamNumber: number, matchNumber: number) => {
+    const addToResult = function (teamNumber: number, matchNumber: number) {
         if (!result.has(matchNumber)) {
             result.set(matchNumber, []);
         }
@@ -64,7 +64,7 @@ export function teamsToScout(
     for (const teamNumber of teamSet) {
         for (const matchNumber of matchesInMap
             .get(teamNumber)
-            ?.slice(-options.endScout) ?? []) {
+            ?.slice(-options.endScout, matchesInMap.get(teamNumber)?.length) ?? []) {
             addToResult(teamNumber, matchNumber);
         }
         for (const matchNumber of matchesInMap
@@ -86,7 +86,7 @@ export function teamsToScout(
                         (result.get(matchA)?.length ?? 0) -
                         (result.get(matchB)?.length ?? 0),
                 )
-                .slice(0, options.minScout - (scoutedCounts.get(teamNumber) ?? 0)) ??
+                .slice(0, Math.max(0, options.minScout - (scoutedCounts.get(teamNumber) ?? 0))) ??
                 []) {
                 addToResult(teamNumber, matchNumber);
             }
@@ -103,7 +103,7 @@ export function teamsToScout(
                 )
                 .slice(
                     0,
-                    options.minScouterAtMatch - (result.get(matchNumber)?.length ?? 0),
+                    Math.max(0, options.minScouterAtMatch - (result.get(matchNumber)?.length ?? 0)),
                 )) {
                 addToResult(teamNumber, matchNumber);
             }
@@ -137,7 +137,7 @@ export function assignScouters(
     for (const match of schedule) {
         let scoutingCounter = 0;
         let availableScouters = scouters.filter(
-            scouter => scoutedInARow.get(scouter) ?? 0 < softLimitMatchesInARow,
+            scouter => ((scoutedInARow.get(scouter) ?? 0) < softLimitMatchesInARow),
         );
         if (
             availableScouters.length <
