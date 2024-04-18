@@ -5,9 +5,11 @@ export default function csvExporter(
     {
         includePerMatch,
         includePerTeam,
+        dateLocale
     }: {
         includePerMatch?: (keyof ScoutingMatch)[];
         includePerTeam?: (keyof ScoutingTeam)[];
+        dateLocale?: string;
     },
 ): string {
     const lines: string[] = [];
@@ -37,6 +39,11 @@ export default function csvExporter(
     for (const match of schedule) {
         const currentLine: string[] = [];
         for (const field of includePerMatch) {
+            const val = match[field];
+            if (val instanceof Date) {
+                currentLine.push(val.toLocaleString(dateLocale ?? "en-US"));
+                continue;
+            }
             currentLine.push(match[field].toString());
         }
         const teams = match.teams.sort((a, b) => {
