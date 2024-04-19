@@ -78,7 +78,7 @@ export function teamsToScout(
     }
     // Scout every team at least minScout times
     for (const teamNumber of teamSet) {
-        if (scoutedCounts.get(teamNumber) ?? 0 < options.minScout) {
+        if ((scoutedCounts.get(teamNumber) ?? 0) < options.minScout) {
             for (const matchNumber of matchesInMap
                 .get(teamNumber)
                 ?.sort(
@@ -94,7 +94,7 @@ export function teamsToScout(
     }
     // Have at least minScoutersAtMatch scouters at each match
     for (const [matchNumber, match] of matchMap.entries()) {
-        if (result.get(matchNumber)?.length ?? 0 < options.minScouterAtMatch) {
+        if ((result.get(matchNumber)?.length ?? 0) < options.minScouterAtMatch) {
             for (const teamNumber of match.teams
                 .map(team => team.teamNumber)
                 .sort(

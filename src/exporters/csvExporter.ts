@@ -5,11 +5,13 @@ export default function csvExporter(
     {
         includePerMatch,
         includePerTeam,
-        dateLocale
+        dateLocale,
+        timeZone
     }: {
         includePerMatch?: (keyof ScoutingMatch)[];
         includePerTeam?: (keyof ScoutingTeam)[];
         dateLocale?: string;
+        timeZone?: string;
     },
 ): string {
     const lines: string[] = [];
@@ -41,7 +43,7 @@ export default function csvExporter(
         for (const field of includePerMatch) {
             const val = match[field];
             if (val instanceof Date) {
-                currentLine.push(val.toLocaleString(dateLocale ?? "en-US"));
+                currentLine.push(val.toLocaleString(dateLocale ?? "en-US", { timeZone: timeZone ?? "EST" }).replaceAll(",", ""));
                 continue;
             }
             currentLine.push(match[field].toString());
