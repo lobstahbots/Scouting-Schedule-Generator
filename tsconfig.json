@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "module": "commonjs",
         "outDir": "./dist",
         "rootDir": "./src",
@@ -10,8 +10,7 @@
         "allowJs": true,
         "lib": [ "ES2023" ],
         "sourceMap": true,
-        "declaration": true,
-        "downlevelIteration": true
+        "declaration": true
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules"],
