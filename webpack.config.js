@@ -1,6 +1,7 @@
 import exp from "constants";
 import path from "path";
 import { fileURLToPath } from "url";
+import webpack from "webpack";
 
 export default [
     {
@@ -33,6 +34,9 @@ export default [
             chunkFormat: "commonjs",
         },
         target: "node",
+        plugins: [
+            new webpack.BannerPlugin({ banner: "#!/usr/bin/env node", raw: true }),
+        ]
     },
     {
         entry: "./src/index.ts",
