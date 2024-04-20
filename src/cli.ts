@@ -6,6 +6,7 @@ import * as fs from "fs";
 import apiImporter from "./importers/apiImporter";
 import simple from "./schedulers/simple";
 import complex from "./schedulers/complex";
+import tbaImporter from "./importers/tbaImporter";
 
 const program = new Command()
     .name("scouting-schedule-generator")
@@ -21,9 +22,14 @@ const program = new Command()
     .addOption(new Option("-t, --timezone <timezone>", "Timezone").default("EST"))
     .addOption(
         new Option(
-            "-e, --event-code <event>",
+            "-e, --event-code <eventCode>",
             "Use FIRST API with this event code",
-        ).makeOptionMandatory(),
+        ).conflicts("tbaApi"),
+    )
+    .addOption(
+        new Option("-T, --tba-api <eventKey>", "Use The Blue Alliance API").conflicts(
+            "eventCode",
+        ),
     )
     .addOption(
         new Option("-y, --year <year>", "Use FIRST API with this year")
@@ -46,8 +52,17 @@ const program = new Command()
 
 const getSchedule = async () => {
     const options = program.opts();
-    if (options.eventCode !== undefined) {
-        return await apiImporter(options);
+    const eventCode = options.eventCode;
+    const eventKey = options.tbaApi;
+    if (eventCode !== undefined) {
+        return await apiImporter({ ...options, eventCode });
+    } else if (eventKey !== undefined) {
+        if (options.matchLevel === "Practice")
+            throw new Error("TBA does not support practice matches");
+        return await tbaImporter({
+            eventKey,
+            quals: options.matchLevel === "Qualification",
+        });
     }
     throw new Error("No input method specified");
 };
