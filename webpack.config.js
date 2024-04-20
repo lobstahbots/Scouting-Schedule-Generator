@@ -1,27 +1,30 @@
-import exp from "constants";
 import path from "path";
 import { fileURLToPath } from "url";
 import webpack from "webpack";
 
+const common = {
+    mode: "production",
+    module: {
+        rules: [
+            {
+                test: /\.ts$/,
+                use: "ts-loader",
+                exclude: /node_modules/,
+            },
+        ],
+    },
+    resolve: {
+        extensions: [".ts", ".js"],
+    },
+    devtool: false,
+}
+
 export default [
     {
-        devtool: "inline-source-map",
-        mode: "production",
+        ...common,
         entry: {
             index: "./src/index.ts",
             cli: "./src/cli.ts",
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.ts$/,
-                    use: "ts-loader",
-                    exclude: /node_modules/,
-                },
-            ],
-        },
-        resolve: {
-            extensions: [".ts", ".js"],
         },
         output: {
             filename: "[name].cjs",
@@ -34,28 +37,22 @@ export default [
             chunkFormat: "commonjs",
         },
         target: "node",
+        externals: {
+            "commander": "commander",
+            "axios": "axios",
+        },
         plugins: [
             new webpack.BannerPlugin({ banner: "#!/usr/bin/env node", raw: true }),
         ]
     },
     {
+        ...common,
         entry: "./src/index.ts",
         experiments: {
             outputModule: true,
         },
-        devtool: "inline-source-map",
-        mode: "production",
-        module: {
-            rules: [
-                {
-                    test: /\.ts$/,
-                    use: "ts-loader",
-                    exclude: /node_modules/,
-                },
-            ],
-        },
-        resolve: {
-            extensions: [".ts", ".js"],
+        externals: {
+            "axios": "axios",
         },
         output: {
             filename: "index.js",
@@ -69,20 +66,8 @@ export default [
         target: "node",
     },
     {
+        ...common,
         entry: "./src/index.ts",
-        mode: "production",
-        module: {
-            rules: [
-                {
-                    test: /\.ts$/,
-                    use: "ts-loader",
-                    exclude: /node_modules/,
-                },
-            ],
-        },
-        resolve: {
-            extensions: [".ts", ".js"],
-        },
         output: {
             filename: "index.web.js",
             path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), "dist"),

@@ -1,6 +1,6 @@
 {
     "name": "scouting-schedule-generator",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "An FRC scouting schedule generator",
     "type": "module",
     "exports": {
@@ -22,7 +22,7 @@
     },
     "scripts": {
         "build": "webpack --mode production",
-        "dev": "webpack --mode development --watch"
+        "dev": "webpack --config webpack-dev.config.js"
     },
     "dependencies": {
         "axios": "^1.6.8",
