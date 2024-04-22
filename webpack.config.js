@@ -40,6 +40,7 @@ export default [
         externals: {
             "commander": "commander",
             "axios": "axios",
+            "exceljs": "exceljs",
         },
         plugins: [
             new webpack.BannerPlugin({ banner: "#!/usr/bin/env node", raw: true }),
@@ -53,6 +54,7 @@ export default [
         },
         externals: {
             "axios": "axios",
+            "exceljs": "exceljs",
         },
         output: {
             filename: "index.js",
@@ -67,7 +69,7 @@ export default [
     },
     {
         ...common,
-        entry: "./src/index.ts",
+        entry: "./src/index.web.ts",
         output: {
             filename: "index.web.js",
             path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), "dist"),
