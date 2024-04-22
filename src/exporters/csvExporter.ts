@@ -43,7 +43,7 @@ export default function csvExporter(
         for (const field of includePerMatch) {
             const val = match[field];
             if (val instanceof Date) {
-                currentLine.push(val.toLocaleString(dateLocale ?? "en-US", { timeZone: timeZone ?? "EST" }).replaceAll(",", ""));
+                currentLine.push(val.toLocaleString(dateLocale ?? "en-US", { timeZone: timeZone ?? "America/New_York" }).replaceAll(",", ""));
                 continue;
             }
             currentLine.push(match[field].toString());

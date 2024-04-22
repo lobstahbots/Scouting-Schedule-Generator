@@ -9,7 +9,7 @@ export default function jsonExporter(
         function (key, val) {
             const trueVal = this[key];
             if (trueVal instanceof Date) {
-                return trueVal.toLocaleString(dateLocale ?? "en-US", { timeZone: timeZone ?? "EST" });
+                return trueVal.toLocaleString(dateLocale ?? "en-US", { timeZone: timeZone ?? "America/New_York" });
             }
             return val;
         },
