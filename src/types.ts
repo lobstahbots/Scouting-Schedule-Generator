@@ -35,4 +35,8 @@ export type Scheduler = (
     options: Options,
 ) => ScoutingSchedule;
 
-export type Exporter = (schedule: ScoutingSchedule, options: Options) => string;
+type ExporterSync = ((schedule: ScoutingSchedule, options: Options) => string | Buffer);
+
+type ExporterAsync = (schedule: ScoutingSchedule, options: Options) => Promise<string | Buffer>;
+
+export type Exporter = ExporterSync | ExporterAsync;

@@ -7,6 +7,7 @@ import apiImporter from "./importers/apiImporter";
 import simple from "./schedulers/simple";
 import complex from "./schedulers/complex";
 import tbaImporter from "./importers/tbaImporter";
+import xlsxExporter from "./exporters/xlsxExporter";
 
 const program = new Command()
     .name("scouting-schedule-generator")
@@ -14,7 +15,7 @@ const program = new Command()
     .addOption(new Option("-o, --output <filename>", "Output to a file"))
     .addOption(
         new Option("-f, --format <format>", "Output format")
-            .choices(["json", "csv"])
+            .choices(["json", "csv", "xlsx"])
             .default("json")
             .makeOptionMandatory(),
     )
@@ -67,7 +68,7 @@ const getSchedule = async () => {
     throw new Error("No input method specified");
 };
 
-const output = (schedule: Schedule) => {
+const output = (schedule: Schedule, highlightTeams?: number[]) => {
     const options = program.opts();
     let result: string = "";
     switch (options.format) {
@@ -83,10 +84,23 @@ const output = (schedule: Schedule) => {
                 timeZone: options.timezone,
             });
             break;
+        case "xlsx":
+            const promise = xlsxExporter(schedule, {
+                timeZone: options.timezone,
+                highlightTeams,
+            });
+            promise.then((buffer): void => {
+                if (options.output !== undefined) {
+                    fs.writeFileSync(options.output, buffer);
+                } else console.log(buffer.toString("utf8"));
+            });
+            break;
     }
-    if (options.output !== undefined) {
-        fs.writeFileSync(options.output, result);
-    } else console.log(result);
+    if (options.format === "json" || options.format === "csv") {
+        if (options.output !== undefined) {
+            fs.writeFileSync(options.output, result);
+        } else console.log(result);
+    }
 };
 
 program
@@ -194,6 +208,7 @@ program
                     softLimitMatchesInARow: options.softLimit,
                     hardLimitMatchesInARow: options.hardLimit,
                 }),
+                usTeams,
             );
         });
     });
