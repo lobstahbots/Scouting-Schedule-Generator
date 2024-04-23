@@ -2,7 +2,7 @@ import { Command, Option } from "@commander-js/extra-typings";
 import { Schedule } from "./types";
 import jsonExporter from "./exporters/jsonExporter";
 import csvExporter from "./exporters/csvExporter";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 import apiImporter from "./importers/apiImporter";
 import simple from "./schedulers/simple";
 import complex from "./schedulers/complex";
@@ -68,9 +68,9 @@ const getSchedule = async () => {
     throw new Error("No input method specified");
 };
 
-const output = (schedule: Schedule, highlightTeams?: number[]) => {
+const output = async (schedule: Schedule, highlightTeams?: number[]) => {
     const options = program.opts();
-    let result: string = "";
+    let result: string | Buffer = "";
     switch (options.format) {
         case "json":
             result = jsonExporter(schedule, {
@@ -85,22 +85,15 @@ const output = (schedule: Schedule, highlightTeams?: number[]) => {
             });
             break;
         case "xlsx":
-            const promise = xlsxExporter(schedule, {
+            result = await xlsxExporter(schedule, {
                 timeZone: options.timezone,
                 highlightTeams,
             });
-            promise.then((buffer): void => {
-                if (options.output !== undefined) {
-                    fs.writeFileSync(options.output, buffer);
-                } else console.log(buffer.toString("utf8"));
-            });
             break;
     }
-    if (options.format === "json" || options.format === "csv") {
-        if (options.output !== undefined) {
-            fs.writeFileSync(options.output, result);
-        } else console.log(result);
-    }
+    if (options.output !== undefined) {
+        await fs.writeFile(options.output, result);
+    } else console.log(result);
 };
 
 program
@@ -111,10 +104,8 @@ program
             .default(4)
             .argParser(value => parseInt(value, 10)),
     )
-    .action((options, command): void => {
-        getSchedule().then(schedule => {
-            output(simple(schedule, program.opts().scouter, options));
-        });
+    .action(async (options, command) => {
+        await output(simple(await getSchedule(), program.opts().scouter, options));
     });
 
 program
@@ -198,19 +189,23 @@ program
             .argParser(value => parseInt(value, 10))
             .makeOptionMandatory(),
     )
-    .action((options, command): void => {
+    .action(async (options, command) => {
         const usTeams = options.usTeams.map(team => parseInt(team, 10));
-        getSchedule().then(schedule => {
-            output(
-                complex(schedule, program.opts().scouter, {
-                    ...options,
-                    usTeams,
-                    softLimitMatchesInARow: options.softLimit,
-                    hardLimitMatchesInARow: options.hardLimit,
-                }),
+        await output(
+            complex(await getSchedule(), program.opts().scouter, {
+                ...options,
                 usTeams,
-            );
-        });
+                softLimitMatchesInARow: options.softLimit,
+                hardLimitMatchesInARow: options.hardLimit,
+            }),
+            usTeams,
+        );
     });
 
-program.parse();
+(async () => {
+    try {
+        await program.parseAsync();
+    } catch (e) {
+        console.error(e);
+    }
+})();
