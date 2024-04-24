@@ -7,6 +7,15 @@
         "require": "./dist/index.cjs",
         "import": "./dist/index.js"
     },
+    "keywords": [
+        "frc",
+        "robotics",
+        "scouting",
+        "FIRST",
+        "analysis",
+        "competition",
+        "robots"
+    ],
     "bin": "dist/cli.cjs",
     "repository": "https://github.com/lobstahbots/Scouting-Schedule-Generator.git",
     "author": "FRC 246 Lobstah Bots <lobstahbots@gmail.com>",
