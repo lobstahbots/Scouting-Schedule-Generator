@@ -11,29 +11,44 @@ import xlsxExporter from "./exporters/xlsxExporter";
 
 const program = new Command()
     .name("scouting-schedule-generator")
-    .usage("[global options] <command> [command options]")
-    .addOption(new Option("-o, --output <filename>", "Output to a file"))
     .addOption(
-        new Option("-f, --format <format>", "Output format")
+        new Option(
+            "-o, --output <filename>",
+            "Output to a file. If not specified, output to stdout.",
+        ),
+    )
+    .addOption(
+        new Option("-f, --format <format>", "Output format.")
             .choices(["json", "csv", "xlsx"])
             .default("json")
             .makeOptionMandatory(),
     )
-    .addOption(new Option("-l, --locale <locale>", "Date locale").default("en-US"))
-    .addOption(new Option("-t, --timezone <timezone>", "Timezone").default("EST"))
+    .addOption(
+        new Option("-l, --locale <locale>", "Date locale (e.g. en-US).").default("en-US"),
+    )
+    .addOption(
+        new Option(
+            "-t, --timezone <timezone>",
+            "Timezone, an IATA timezone identifier.",
+        ).default("America/New_York"),
+    )
     .addOption(
         new Option(
             "-e, --event-code <eventCode>",
-            "Use FIRST API with this event code",
+            "Use FIRST API with this event code. Make sure to set FIRST_API_KEY and FIRST_USERNAME in your environment variables.",
         ).conflicts("tbaApi"),
     )
     .addOption(
-        new Option("-T, --tba-api <eventKey>", "Use The Blue Alliance API").conflicts(
-            "eventCode",
-        ),
+        new Option(
+            "-T, --tba-api <eventKey>",
+            "Use The Blue Alliance API. Make sure to set TBA_API_KEY in your environment varaibles.",
+        ).conflicts("eventCode"),
     )
     .addOption(
-        new Option("-y, --year <year>", "Use FIRST API with this year")
+        new Option(
+            "-y, --year <year>",
+            "Use FIRST API with this year. Make sure to set FIRST_API_KEY and FIRST_USERNAME in your environment variables.",
+        )
             .default(new Date().getFullYear())
             .argParser(value => parseInt(value, 10))
             .makeOptionMandatory(),
@@ -41,7 +56,7 @@ const program = new Command()
     .addOption(
         new Option(
             "-L, --match-level <matchLevel>",
-            "Match level to import from FIRST API",
+            "Match level to import from FIRST API. Make sure to set FIRST_API_KEY and FIRST_USERNAME in your environment variables.",
         )
             .choices(["Qualification", "Playoff", "Practice"])
             .default("Qualification")
@@ -100,7 +115,7 @@ program
     .command("simple")
     .description("Simple scheduler")
     .addOption(
-        new Option("-r, --rotate-after <number>", "Rotate after this many matches")
+        new Option("-r, --rotate-after <number>", "Rotate after this many matches.")
             .default(4)
             .argParser(value => parseInt(value, 10)),
     )
