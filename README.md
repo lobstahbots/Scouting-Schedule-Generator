@@ -65,7 +65,7 @@ It's recommended that you pin a version, like so:
 ```html
 <script src="https://cdn.jsdelivr.net/npm/scouting-schedule-generator@0.3.0/dist/index.web.js" />
 ```
-You can then access the functions `csvExporter`, `jsonExporter`, `apiImporter`, `tbaImporter`, `complexScheduler`, and `simpleScheduler` on the object `ScoutingScheduleGenerator`. (Unfortunately the importers don't work on the web right now, I'm working on fixing it.)
+You can then access the functions `csvExporter`, `jsonExporter`, `apiImporter`, `tbaImporter`, `complexScheduler`, and `simpleScheduler` on the object `ScoutingScheduleGenerator`.
 
 ## Node.js Usage
 
