@@ -12,12 +12,14 @@ const compLevelMap = {
 export default async function tbaImporter({
     eventKey,
     quals,
+    apiKey
 }: {
     eventKey: string;
     quals?: boolean;
+    apiKey?: string;
 }): Promise<Schedule> {
     const url = `https://www.thebluealliance.com/api/v3/event/${eventKey}/matches/simple`;
-    const API_KEY = process.env.TBA_API_KEY;
+    const API_KEY: string | undefined = apiKey ?? process.env.TBA_API_KEY;
     if (API_KEY === undefined) {
         throw new Error(
             "API key not found in environment variables. Make sure to set TBA_API_KEY.",

@@ -5,16 +5,20 @@ export default async function apiImporter({
     year,
     eventCode,
     matchLevel,
+    apiKey,
+    username
 }: {
     year: number;
     eventCode: string;
     matchLevel?: string;
+    apiKey?: string;
+    username?: string;
 }): Promise<Schedule> {
     const url =
         `https://frc-api.firstinspires.org/v3.0/${year}/schedule/${eventCode}` +
         (matchLevel !== undefined ? "?tournamentLevel=" + matchLevel : "");
-    const API_KEY = process.env.FIRST_API_KEY;
-    const USERNAME = process.env.FIRST_USERNAME;
+    const API_KEY = apiKey ?? process.env.FIRST_API_KEY;
+    const USERNAME = username ?? process.env.FIRST_USERNAME;
     if (API_KEY === undefined || USERNAME === undefined) {
         throw new Error(
             "API key or username not found in environment variables. Make sure to set FIRST_API_KEY and FIRST_USERNAME.",
