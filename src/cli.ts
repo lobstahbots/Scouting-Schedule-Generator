@@ -8,6 +8,7 @@ import simple from "./schedulers/simple";
 import complex from "./schedulers/complex";
 import tbaImporter from "./importers/tbaImporter";
 import xlsxExporter from "./exporters/xlsxExporter";
+import fileImporter from "./importers/fileImporter";
 
 const program = new Command()
     .name("scouting-schedule-generator")
@@ -36,13 +37,13 @@ const program = new Command()
         new Option(
             "-e, --event-code <eventCode>",
             "Use FIRST API with this event code. Make sure to set FIRST_API_KEY and FIRST_USERNAME in your environment variables.",
-        ).conflicts("tbaApi"),
+        ).conflicts(["tbaApi", "inputFile"]),
     )
     .addOption(
         new Option(
             "-T, --tba-api <eventKey>",
             "Use The Blue Alliance API. Make sure to set TBA_API_KEY in your environment varaibles.",
-        ).conflicts("eventCode"),
+        ).conflicts(["eventCode", "inputFile"]),
     )
     .addOption(
         new Option(
@@ -64,12 +65,19 @@ const program = new Command()
     )
     .addOption(
         new Option("-s, --scouter <scouter...>", "Scouter name").makeOptionMandatory(),
+    )
+    .addOption(
+        new Option("-i, --input-file <filename>", "Input file.").conflicts([
+            "eventCode",
+            "tbaApi",
+        ]),
     );
 
 const getSchedule = async () => {
     const options = program.opts();
     const eventCode = options.eventCode;
     const eventKey = options.tbaApi;
+    const filename = options.inputFile;
     if (eventCode !== undefined) {
         return await apiImporter({ ...options, eventCode });
     } else if (eventKey !== undefined) {
@@ -79,6 +87,8 @@ const getSchedule = async () => {
             eventKey,
             quals: options.matchLevel === "Qualification",
         });
+    } else if (filename !== undefined) {
+        return await fileImporter({ path: filename });
     }
     throw new Error("No input method specified");
 };
