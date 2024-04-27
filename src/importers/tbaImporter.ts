@@ -48,7 +48,7 @@ export default async function tbaImporter({
             matchNumber: match.match_number,
             teams: [],
             tournamentLevel: tournamentLevel,
-            description: `${tournamentLevel} ${match.set_number}-${match.match_number}`,
+            description: quals ? `${tournamentLevel} ${match.match_number}` : `${tournamentLevel} ${match.set_number}-${match.match_number}`,
         };
         let red_counter = 0;
         for (const team of match.alliances.red.team_keys) {
