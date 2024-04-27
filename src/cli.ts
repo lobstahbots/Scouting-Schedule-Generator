@@ -71,6 +71,9 @@ const program = new Command()
             "eventCode",
             "tbaApi",
         ]),
+    )
+    .addOption(
+        new Option("-U, --url-template <urlTemplate>", "URL template for scouter links. Only works with xlsx format. Default is no link. See README for more information."),
     );
 
 const getSchedule = async () => {
@@ -113,6 +116,7 @@ const output = async (schedule: Schedule, highlightTeams?: number[]) => {
             result = await xlsxExporter(schedule, {
                 timeZone: options.timezone,
                 highlightTeams,
+                urlTemplate: options.urlTemplate,
             });
             break;
     }

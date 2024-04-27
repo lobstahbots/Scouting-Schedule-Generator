@@ -52,6 +52,7 @@ Options:
   -a, --start-scout <matches>          The number of matches to scout after skipping skip-start-scout matches. (default: 3)
   -m, --min-scout <times>              The minimum number of times a team should be scouted. (default: 6)
   -M, --min-scouter-at-match <number>  The minimum number of scouters that should be at each match. This is useful if you want somebody to be watching each match, even if the other parameters don't cause any of the teams in it to be scouted. (default: 1)
+  -U, --url-template <urlTemplate>     URL template for scouter links. Only works with xlsx format. Default is no link. See README for more information.
   --help                               display help for command
 ```
 
@@ -73,11 +74,19 @@ Install the library using
 ```bash
 $ npm install scouting-schedule-generator
 ```
-Then, assuming your `PATH` is set correctly, you should be able to use the CLI as described above. To use the library, you can either 
+Then, assuming your `PATH` is set correctly, you should be able to use the CLI as described above. To use the library, you can either (ESM)
 ```js
 import { csvExporter, jsonExporter, apiImporter, tbaImporter, complexScheduler, simpleScheduler } from "scouting-schedule-generator";
 ```
-or
+or (CommonJS)
 ```js
 const { csvExporter, jsonExporter, apiImporter, tbaImporter, complexScheduler, simpleScheduler } = require("scouting-schedule-generator");
 ```
+
+## Why?
+
+The simple algorithm is one which is used by a lot of scouting systems. However, it is less than ideal when you don't have at least 12 scouters. Thus, I wrote the complex algorithm to scout the matches which will have the most value for planning matches as well as for alliance selection.
+
+## URL Template
+
+If your scouting operation uses forms, and you are generating an Excel schedule, you have the option to make each scouter's name on the sheet link to the form with fields already filled out. Specify `-U` on the command line for this. The template will be a URL with an arbitrary amount of keys, listed as `{key}`. Keys can be any key in the types `ScoutingMatch` or `ScoutingTeam` (see `types.ts`). If you use Google Forms, check out [this link](https://theconfuzedsourcecode.wordpress.com/2019/11/10/lets-auto-fill-google-forms-with-url-parameters/). Note, however, that some things have changed since then and the `<input>` elements *are not next to* their respective form fields, rather they are at the bottom of the HTML. This means you'll have to try editing the value of the `<input>` element in the Inspect panel to find which form field it's associated with.

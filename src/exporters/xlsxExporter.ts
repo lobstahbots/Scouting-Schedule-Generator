@@ -65,16 +65,16 @@ export default async (
         if (urlTemplate === undefined) {
             return team.scouter;
         }
-        const url = urlTemplate;
+        let url = urlTemplate;
         for (const key in team) {
-            url.replaceAll(
-                `\${${key}}`,
+            url = url.replaceAll(
+                `{${key}}`,
                 team[key as keyof ScoutingTeam]?.toString() ?? "",
             );
         }
         for (const key in match) {
-            url.replaceAll(
-                `\${${key}}`,
+            url = url.replaceAll(
+                `{${key}}`,
                 match[key as keyof ScoutingMatch]?.toString() ?? "",
             );
         }
